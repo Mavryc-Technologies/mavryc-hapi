@@ -51,44 +51,44 @@ function compareTokens (email, token) {
 }
 
 //Function to add Favorite flight
-function addFlightFavorites(req) {
-    var originCity = req.body.originCity
-    var destinationCity = req.body.destinationCity
-    var email = req.body.email
+// function addFlightFavorites(req) {
+//     var originCity = req.body.originCity
+//     var destinationCity = req.body.destinationCity
+//     var email = req.body.email
 
-    //Verify the user has a token
-    function getFlightFavorites(req) {
+//     //Verify the user has a token
+//     function getFlightFavorites(req) {
 
 
-    User.findOne({ 'local.email' :  email }, function(err, user) {
-        if (err)
-            return(err)
-        // Find user with that email
-            if (user) {
-               //Get their current fav object
-                if (user.local.favoriteFlights != undefined){
-                    flightFavorites = user.local.favoriteFlights
-                    //Add new flight to flight favorites
-                    flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
-                    user.save(function(err) {
-                        console.log("About to save")
-                        if (err)
-                            throw err;
-                    });
-                    console.log("Added flight to favorite flights array")
-                } else {
-                    flightFavorites = []
-                    //Add new flight to flight favorites
-                    flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
-                    console.log("Added flight to favorite flights array")
-                }
-            } else {
-                console.log("No user with that email")
-                return("Failed!!!!! No User with that email");
-            }
-    })
-    console.log("FInished adding new flight to favorites.")
-}
+//     User.findOne({ 'local.email' :  email }, function(err, user) {
+//         if (err)
+//             return(err)
+//         // Find user with that email
+//             if (user) {
+//                //Get their current fav object
+//                 if (user.local.favoriteFlights != undefined){
+//                     flightFavorites = user.local.favoriteFlights
+//                     //Add new flight to flight favorites
+//                     flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
+//                     user.save(function(err) {
+//                         console.log("About to save")
+//                         if (err)
+//                             throw err;
+//                     });
+//                     console.log("Added flight to favorite flights array")
+//                 } else {
+//                     flightFavorites = []
+//                     //Add new flight to flight favorites
+//                     flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
+//                     console.log("Added flight to favorite flights array")
+//                 }
+//             } else {
+//                 console.log("No user with that email")
+//                 return("Failed!!!!! No User with that email");
+//             }
+//     })
+//     console.log("FInished adding new flight to favorites.")
+// }
 
 function getFlightFavorites(req) {
     //Get the data from the req and save it for what we need it.
@@ -131,7 +131,5 @@ function getFlightFavorites(req) {
 
 module.exports = {
     compareTokens:compareTokens,
-    addFlightFavorites:addFlightFavorites,
     getFlightFavorites:getFlightFavorites
 }
-

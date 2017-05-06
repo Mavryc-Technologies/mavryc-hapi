@@ -35,6 +35,7 @@ function createFlight(req) {
 
 
 function viewAllFlights() {
+    console.log("Starting method")
     Flight.find(function (err, flight) {
         if (err) return handleError(err);
         return flight

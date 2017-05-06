@@ -4,17 +4,27 @@
 // Note: the options in .babelrc are also used for client-side code
 // because we use a babel loader in webpack config
 require('babel-register');
-
+//Get all the stuff that we need.
 const config = require('./config/variables');
 const path = require('path');
 const Hapi = require('hapi');
 const Inert = require('inert');
 const Vision = require('vision');
 const HapiReactViews = require('hapi-react-views');
+const mongoose = require('mongoose');
+
+var FlightMethods = require('./app/app-modules/flights/flight-methods.js');
 
 
+// configuration for Mongoose ===============================================================
+var configDB = require('./config/database.js');
+mongoose.Promise = global.Promise;
+mongoose.connect(configDB.url); // connect to our database
+
+//Lets get an instance of our server
 const server = new Hapi.Server();
 
+//COnfigure the server so that it is matching the ports we want it to match
 server.connection({
   host: config.server.host,
   port: config.server.port
@@ -25,6 +35,8 @@ const plugins = [
   { register: Inert }, // enables serving static files (file and directory handlers)
   { register: Vision } // enables rendering views with custom engines (view handler)
 ];
+
+
 // Enable proxying requests to webpack dev server (proxy handler)
 if (process.env.NODE_ENV === 'development') {
   const H2o2 = require('h2o2'); // eslint-disable-line import/no-extraneous-dependencies, global-require
@@ -32,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
   plugins.push({ register: H2o2 });
 }
 
-
+//Registering Hapi Server
 server.register(plugins, (err) => {
   if (err) {
     console.error(err);
@@ -76,7 +88,9 @@ server.register(plugins, (err) => {
       }
     });
   });
-
+  
+  // routes ======================================================================
+  
   // Catch-all
   server.route({
     method: 'GET',
@@ -91,9 +105,21 @@ server.register(plugins, (err) => {
     method: 'GET',
     path: '/',
     handler: {
-      view: 'app' // app.jsx in /views
+      view: 'app', // app.jsx in /views
     }
   });
+
+  //DB Test
+  server.route({
+    method: 'GET',
+    path: '/db',
+    handler: function (request, reply) {
+        var flights = FlightMethods.viewAllFlights()
+        console.log(flights);
+        reply(flights)
+    }
+  });
+  
 
 
   // DEV SETUP
