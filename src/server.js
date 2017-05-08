@@ -20,11 +20,12 @@ var FlightMethods = require('./app/app-modules/flights/flight-methods.js');
 var configDB = require('./config/database.js');
 mongoose.Promise = global.Promise;
 mongoose.connect(configDB.url); // connect to our database
+console.log("Mongoose was connected")
 
 //Lets get an instance of our server
 const server = new Hapi.Server();
 
-//COnfigure the server so that it is matching the ports we want it to match
+//Configure the server so that it is matching the ports we want it to match
 server.connection({
   host: config.server.host,
   port: config.server.port
@@ -91,36 +92,8 @@ server.register(plugins, (err) => {
   
   // routes ======================================================================
   
-  // Catch-all
-  server.route({
-    method: 'GET',
-    path: '/{path*}',
-    handler: (request, reply) => {
-      reply(`Hapi catch-all view for /${encodeURIComponent(request.params.path)}`);
-    }
-  });
-
-  // App
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: {
-      view: 'app', // app.jsx in /views
-    }
-  });
-
-  //DB Test
-  server.route({
-    method: 'GET',
-    path: '/db',
-    handler: function (request, reply) {
-        var flights = FlightMethods.viewAllFlights()
-        console.log(flights);
-        reply(flights)
-    }
-  });
-  
-
+  // routes ======================================================================
+  require('./app/routes.js')(server); // load our routes and pass in our app and fully configured passport  
 
   // DEV SETUP
   if (process.env.NODE_ENV === 'development') {
@@ -146,6 +119,6 @@ server.register(plugins, (err) => {
   }
 
   server.start(() => {
-    console.log('Hapi server started!');
+    console.log('Hapi server started get ready for some fun!');
   });
 });

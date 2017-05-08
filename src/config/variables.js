@@ -45,7 +45,6 @@ const config = {
   server: {
     publicFiles: [
       'robots.txt',
-      'favicon.ico'
     ],
     host: SERVER_HOST,
     port: SERVER_PORT,

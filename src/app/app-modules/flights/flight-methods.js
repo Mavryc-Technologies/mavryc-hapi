@@ -1,7 +1,7 @@
 //Get all the stuff we nedd 
 //Get access to the flight model
 var Flight = require('../../models/flight');
-
+var User = require('../../models/user');
 //---------------------------------------------------
 //Methods
 //---------------------------------------------------
@@ -35,11 +35,11 @@ function createFlight(req) {
 
 
 function viewAllFlights() {
-    console.log("Starting method")
-    Flight.find(function (err, flight) {
+    var allFlights = Flight.find(function (err, flights) {
         if (err) return handleError(err);
-        return flight
+        return flights
     })
+    return allFlights
 }
 
 

@@ -5,6 +5,7 @@ const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const config = require('./variables');
 
 
+//Entry point to the React Application
 const APP_ENTRY = path.join(config.paths.source, 'main-app');
 const WEBPACK_HOT_ENTRY = `webpack-hot-middleware/client?path=${config.webpack.devServerUrl}/__webpack_hmr`;
 const JS_JSX = /\.(js|jsx)$/; // We allow both .js or .jsx extensions for JS code – choose what you like more.

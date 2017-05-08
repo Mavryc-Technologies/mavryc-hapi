@@ -11,7 +11,7 @@ var flightSchema = mongoose.Schema({
         route           : {
             origin          : {
                 city        : String,
-                state       : String,
+                state       : String, 
                 zipcode     : String,
                 airportcode : String
             },
