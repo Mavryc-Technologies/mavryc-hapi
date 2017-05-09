@@ -6,6 +6,7 @@ const App = () => (
     <head>
       <meta charSet="utf-8" />
       <title>Main App</title>
+      <link rel="stylesheet" type="text/css" href="../main-app.css"/>
     </head>
     <body>
       <div id="test">This text will be replaced by our component</div>

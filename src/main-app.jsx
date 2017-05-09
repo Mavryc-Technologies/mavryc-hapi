@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Test from './components/material-test';
+import HomePage from './components/homepage-container';
 
 function mainApp() {
   ReactDOM.render(
-    <Test />,
+    <HomePage />,
     document.getElementById('test'),
   );
 }
