@@ -2,9 +2,16 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import store from './store';
+import handleLoginInfo from './actions/authentication-actions';
 
+const sampleInfo = {
+  email: 'Jake@aol.com',
+  password: 'abc123'
+};
 const handleLogin = () => {
-  alert('Login');
+  store.dispatch(handleLoginInfo(sampleInfo));
+  console.log(store.getState());
 };
 
 const containerStyle = {
