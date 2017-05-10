@@ -93,7 +93,8 @@ server.register(plugins, (err) => {
   // routes ======================================================================
   
   // routes ======================================================================
-  require('./app/routes.js')(server); // load our routes and pass in our app and fully configured passport  
+  require('./app/routes.js')(server); // Application Specific routes
+  require('./api-routes.js')(server); // API Specific routes
 
   // DEV SETUP
   if (process.env.NODE_ENV === 'development') {
