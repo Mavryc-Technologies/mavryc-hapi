@@ -64,6 +64,7 @@ function registerNewUser(request) {
                 newUser.local.phone         = phone;
                 newUser.local.birthday      = birthday;
                 newUser.local.token         = decodedToken;
+                newUser.local.role          = "PASSENGER"
                 newUser.local.dateCreate    = dateCreate
 
                 // save the user
@@ -102,6 +103,17 @@ function loginExistinguser(request) {
             return(err);
         }
     });
+}
+
+
+//Check User role
+function checkUserRole(token) {
+    if (!token) {
+        return("Access Denied: NO USER TOKEN WAS SUBMITTED WITH THIS REQUEST")
+    } else {
+        return("Wohoo a token was presented")
+    }
+
 }
 
 

@@ -17,6 +17,7 @@ var userSchema = mongoose.Schema({
         facebooktoken  : String,
         token          : Object,
         favoriteFlights: Array,
+        role           : String,
         dateCreate     : Date,
     },
 });
