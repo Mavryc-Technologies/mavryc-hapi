@@ -24,6 +24,7 @@ module.exports = function(server) {
   });
 
   
+  //Simple Webpage Components
   // App
   server.route({
     method: 'GET',
@@ -32,4 +33,22 @@ module.exports = function(server) {
       view: 'app', // app.jsx in /views
     }
   });
+
+  // Signup
+  server.route({
+    method: 'GET',
+    path: '/signup-test',
+    handler: {
+      view: 'signup'
+    }
+  });
+
+  //Login
+  server.route({
+    method: "GET",
+    path: "/login-test",
+    handler: {
+      view: 'login'
+    }
+  })
 }

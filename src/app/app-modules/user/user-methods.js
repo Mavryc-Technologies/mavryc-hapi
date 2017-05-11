@@ -1,9 +1,8 @@
 //Get all the stuff we nedd 
-//Get access to the flight model
+//Get access to the User Model
 var User = require('../../models/user');
 var jwt = require('jwt-simple');
-//Variables required for token decoding
-var decodesecret = 'alwaysflyukko';
+
 
 
 //---------------------------------------------------
@@ -19,124 +18,95 @@ function getAllUsers() {
     return allUsers
 }
 
-//Function to compare client token with server token for authenticated calls
-// function compareTokens (email, token) {
-//     //Name Parameters
-//     var token = token;
-//     var email = email;
+// Register New User
+function registerNewUser(request) {
+    // Get the payload into a variable that is easier to work with
+    var payload = request.payload;
+    // Name all variables
+    var firstname = payload.firstname;
+    var lastname = payload.lastname;
+    var email = payload.email;
+    var password = payload.password;
+    var phone = payload.phone;
+    var birthday = payload.birthday;
+    
+    // Check to see if email already exists in the Database
+    User.findOne({ 'email' :  email }, function(err, users) {
+            // if there are any errors, return the error
+            if (err)
+                return done(err);
 
-//     //Find user by email
-//     User.findOne({ 'local.email' :  email }, function(err, user) {
-//         // if there are any errors, return the error
-//             if (err)
-//                 return(err);
+            // check to see if theres already a user with that email
+            if (users) {
+                return(err);
+            } else {
+                // No user exists, time to create a new user.
+                //Place code here to create a token
+                var payload = { email: email };
+                var secret = 'alwaysflyukko';
+                // encoded object that is being returned to the cleint
+                var token = jwt.encode(payload, secret);
+                // the decoded object is being stroed in the user model to reference
+                var decodedToken = jwt.decode(token, secret);
 
-//             // Find user with that email
-//             if (user) {
-//                //Place code here to check if decoded token matched user stored tokens
-//                 //decode token passed back from client
-//                 var decodedToken = jwt.decode(token, decodesecret);
+                //Get current date for date create
+                var dateCreate = Date()
+
+                // if there is no user with that email
+                // create the user
+                var newUser            = new User();
+
+                // set the user's local credentials
+                newUser.local.firstname      = firstname;
+                newUser.local.lastname      = lastname;
+                newUser.local.email         = email;
+                newUser.local.password      = newUser.generateHash(password);
+                newUser.local.phone         = phone;
+                newUser.local.birthday      = birthday;
+                newUser.local.token         = decodedToken;
+                newUser.local.dateCreate    = dateCreate
+
+                // save the user
+                
+                newUser.save(function(err) {
+                    console.log("About to save")
+                    if (err)
+                        throw err;
+                    //Return token in return statment
+                    console.log(token, newUser)
+                    return (token, newUser);
+                });
+            }
             
-//                 //Find Users token 
-//                 var userToken = user.local.token
-                
+    });
+}
 
-//                 //Compare tokens
-//                 console.log(userToken, decodedToken)
-//                 if ( decodedtoken == userToken){
-//                     console.log("authentication success")
-//                     return(success)
-//                 } else {
-//                     console.log("Token Auth Failed")
-//                     return(req.flash('failled', 'Token Authentication Failed'));
-//                 }
-                
-//             } else {
-//                 console.log("No user with that email")
-//                 return(req.flash('failled', 'That user does not exist'));
-//             }
-//     })
-// }
-
-// //Function to add Favorite flight
-// // function addFlightFavorites(req) {
-// //     var originCity = req.body.originCity
-// //     var destinationCity = req.body.destinationCity
-// //     var email = req.body.email
-
-// //     //Verify the user has a token
-// //     function getFlightFavorites(req) {
-
-
-// //     User.findOne({ 'local.email' :  email }, function(err, user) {
-// //         if (err)
-// //             return(err)
-// //         // Find user with that email
-// //             if (user) {
-// //                //Get their current fav object
-// //                 if (user.local.favoriteFlights != undefined){
-// //                     flightFavorites = user.local.favoriteFlights
-// //                     //Add new flight to flight favorites
-// //                     flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
-// //                     user.save(function(err) {
-// //                         console.log("About to save")
-// //                         if (err)
-// //                             throw err;
-// //                     });
-// //                     console.log("Added flight to favorite flights array")
-// //                 } else {
-// //                     flightFavorites = []
-// //                     //Add new flight to flight favorites
-// //                     flightFavorites.push({ originCity: originCity, destinationCity: destinationCity });
-// //                     console.log("Added flight to favorite flights array")
-// //                 }
-// //             } else {
-// //                 console.log("No user with that email")
-// //                 return("Failed!!!!! No User with that email");
-// //             }
-// //     })
-// //     console.log("FInished adding new flight to favorites.")
-// // }
-
-// function getFlightFavorites(req) {
-//     //Get the data from the req and save it for what we need it.
-//     var email = req.body.email
-//     var token = req.body.token
-
-//     //Verify that the User has Token Authentication
-//     compareTokens(email, token)
-
-//     //Get the favorite flight array of objects
-//     User.findOne({ 'local.email' :  email }, function(err, user) {
-//         if (err)
-//             return(err)
-//         // Find user with that email
-//             if (user) {
-//                //Get their current fav object
-//                 if (user.local.favoriteFlights != undefined){
-//                     var flightFavorites = user.local.favoriteFlights
-//                     console.log(flightFavorites)
-//                     return(flightFavorites)
-//                 } else {
-//                     console.log("NOt finiding their object")
-//                     var flightFavorites = []
-//                     console.log(flightFavorites)
-//                     return(flightFavorites)
-//                 }
-//             } else {
-//                 console.log("No user with that email")
-//                 return("Failed!!!!! No User with that email");
-//             }
-//     })
-
-
-
-// }
-
-
-
+// Login Existing User
+function loginExistinguser(request) {
+    // Get the payload into a variable that is easier to work with
+    var payload = request.payload;
+    // Name all variables
+    var email = payload.email;
+    var password = payload.password;
+    password = User.methods.generateHash(password)
+    
+    //Check DB for matching email and password
+    User.findOne({ 'email' :  email, 'password': password}, function(err, users) {
+        // if there are any errors, return the error
+        if (err)
+            return(err);
+        if (users) {
+            console.log("Found User")
+        } else {
+            console.log("Email or Password do not match")
+            return(err);
+        }
+    });
+}
 
 
 module.exports = {
-    getAllUsers:getAllUsers
+    getAllUsers:getAllUsers,
+    registerNewUser:registerNewUser,
+    loginExistinguser:loginExistinguser
 }
