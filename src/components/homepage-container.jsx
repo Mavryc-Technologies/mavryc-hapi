@@ -1,7 +1,4 @@
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
 import store from './store';
 import handleLoginInfo from './actions/authentication-actions';
 
@@ -25,22 +22,22 @@ const containerStyle = {
 };
 
 const HomePage = () => (
-  <MuiThemeProvider>
-    <div style={containerStyle}>
-      <div>
-        <p>SKYLAR</p>
-        <TextField
-          hintText="Email"
-        />
-        <br />
-        <TextField
-          hintText="Password"
-        />
-        <br />
-        <RaisedButton onClick={handleLogin} label="LOGIN" />
-      </div>
+  <div style={containerStyle}>
+    <div>
+      <p>SKYLAR</p>
+      <input
+        type="text"
+        placeholder="Email"
+      />
+      <br />
+      <input
+        type="text"
+        placeholder="Password"
+      />
+      <br />
+      <button onClick={handleLogin} label="LOGIN" />
     </div>
-  </MuiThemeProvider>
+  </div>
 );
 
 
