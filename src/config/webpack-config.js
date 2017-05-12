@@ -62,6 +62,10 @@ if (process.env.NODE_ENV === 'development') {
       loaders: [
         CSS_LOADER,
         {
+          test: /\.sass$/,
+          loaders: [ 'style', 'css', 'sass' ]
+        },
+        {
           test: JS_JSX,
           loader: BABEL,
           include: config.paths.source,

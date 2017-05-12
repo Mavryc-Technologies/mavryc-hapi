@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+// Stylesheets
+require('../styles/base.sass');
 
 const HomePage = () => (
   <div>
