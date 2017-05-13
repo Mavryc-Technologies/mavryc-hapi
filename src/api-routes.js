@@ -34,7 +34,7 @@ server.route({
     method: 'POST',
     path: '/user-signup',
     handler: function (request, reply) {
-      UserMethods.registerNewUser(request);
+      UserAuth.registerNewUser(request);
       reply.view('app');
     }
   });

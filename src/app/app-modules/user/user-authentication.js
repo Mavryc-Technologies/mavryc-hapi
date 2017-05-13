@@ -1,7 +1,10 @@
 // Get everthing we might need.
-var bcrypt   = require('bcrypt-nodejs');
+// Bcrypt info
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 //Get access to the User Model
 var User = require('../../models/user');
+var jwt = require('jwt-simple');
 // generating a hash
 function generateHash(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -19,15 +22,21 @@ function registerNewUser(request) {
     var password = payload.password;
     var phone = payload.phone;
     var birthday = payload.birthday;
+
+    // Bcrpt password so no Hackers find it, although they probably will
+    var salt = bcrypt.genSaltSync(saltRounds);
+    var hash = bcrypt.hashSync(password, salt);
+
     
     // Check to see if email already exists in the Database
-    User.findOne({ 'email' :  email }, function(err, user) {
+    User.findOne({ 'local.email' :  email }, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
 
             // check to see if theres already a user with that email
             if (user) {
+                console.log("Email is already being used")
                 return(err);
             } else {
                 // No user exists, time to create a new user.
@@ -36,8 +45,6 @@ function registerNewUser(request) {
                 var secret = 'alwaysflyukko';
                 // encoded object that is being returned to the cleint
                 var token = jwt.encode(payload, secret);
-                // the decoded object is being stroed in the user model to reference
-                var decodedToken = jwt.decode(token, secret);
 
                 //Get current date for date create
                 var dateCreate = Date()
@@ -50,10 +57,10 @@ function registerNewUser(request) {
                 newUser.local.firstname      = firstname;
                 newUser.local.lastname      = lastname;
                 newUser.local.email         = email;
-                newUser.local.password      = newUser.generateHash(password);
+                newUser.local.password      = hash;
                 newUser.local.phone         = phone;
                 newUser.local.birthday      = birthday;
-                newUser.local.token         = decodedToken;
+                newUser.local.token         = token;
                 newUser.local.role          = "PASSENGER"
                 newUser.local.dateCreate    = dateCreate
 
@@ -78,33 +85,31 @@ function loginUser (request) {
     // Name all variables
     var email = payload.email;
     var password = payload.password;
-    var newUser            = new User();
-    password = newUser.generateHash(password)
-    console.log(email)
-    
-    //Find user in DB
-    User.findOne({ 'email':  email }, function(err, user) {
-        // if there are any errors, return the error before anything else
-        if (err) {
-            console.log("error");
-            return(err);
-        }
-
-        // if no user is found, return the message
-        // if (!users) {
-        //     console.log("No user was found")
-        //     return ("NO user was found."); // req.flash is the way to set flashdata using connect-flash
-        // }
-        // if the user is found but the password is wrong
-        // if (users.password != password) {
-        //     console.log("wrong Password")
-        //     return done(('Wrong password.')); 
-        // }
-
-        // all is well, return successful user
-        console.log(user)
-        return (user);
+    //Check to see if there is a user with mathching email and password
+    User.findOne({ 'local.email' :  email}, function(err, user) {
+            // if there are any errors, return the error
+            if (err) {
+                return (err);
+            };
+            // check to see if theres already a user with that email
+            if (user) {
+                var hash = user.local.password
+                // Bcrpt password so no Hackers find it, although they probably will
+                 if (bcrypt.compareSync(password, hash) == true) {
+                    console.log("Password Matched")
+                    console.log(user)
+                 } else {
+                     console.log("Email and Password do not match")
+                 }
+                
+                return(user);
+            } else {
+                console.log("Email and Password do not match")
+                return("Email and Password do not match")
+            }
+            
     });
+
 }
 
 function checkUserRole (request) {
