@@ -7,8 +7,8 @@ require('../styles/base.sass');
 
 const HomePage = () => (
   <div>
-    <h1>HomePage</h1>
-    <li><Link to="/about">About</Link></li>
+    <h1>Dashboard</h1>
+    <li><Link to="/user-signup">User Signup</Link></li>
   </div>
 );
 

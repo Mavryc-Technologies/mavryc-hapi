@@ -4,6 +4,8 @@
 var FlightMethods = require('./app/app-modules/flights/flight-methods.js');
 //Load up User methods
 var UserMethods = require('./app/app-modules/user/user-methods.js')
+//Load up asll User Auth methods
+var UserAuth = require('./app/app-modules/user/user-authentication.js')
 
 
 
@@ -42,7 +44,7 @@ server.route({
     method: 'POST',
     path: '/user-login',
     handler: function (request, reply) {
-      UserMethods.loginExistinguser(request);
+      UserAuth.loginUser(request);
       // reply.view('app');
     }
   });

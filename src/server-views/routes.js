@@ -1,10 +1,11 @@
 // app/routes.js
 
 // load up the flight methods
-var FlightMethods = require('./app-modules/flights/flight-methods.js');
+var FlightMethods = require('../app/app-modules/flights/flight-methods.js');
 //Load up User methods
-var UserMethods = require('./app-modules/user/user-methods.js')
-
+var UserMethods = require('../app/app-modules/user/user-methods.js')
+//Load up asll User Auth methods
+var UserAuth = require('../app/app-modules/user/user-authentication.js')
 
 
 module.exports = function(server) {
@@ -49,6 +50,15 @@ module.exports = function(server) {
     path: "/login-test",
     handler: {
       view: 'login'
+    }
+  })
+
+  //Profile
+  server.route({
+    method: "GET",
+    path: "/profile",
+    handler: {
+      view: 'profile'
     }
   })
 }

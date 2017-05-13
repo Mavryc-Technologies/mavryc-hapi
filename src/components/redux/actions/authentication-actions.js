@@ -21,4 +21,14 @@ function handleLoginInfo(loginInfo) {
   };
 }
 
-export default handleLoginInfo;
+function handleSignInfo(signupInfo) {
+  return {
+    type: types.SAVE_SIGNUP_INPUT,
+    signupInfo
+  }
+}
+
+module.exports = {
+  loginInfo:loginInfo,
+  handleSignInfo:handleSignInfo
+}
