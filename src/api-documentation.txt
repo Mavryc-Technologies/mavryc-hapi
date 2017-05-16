@@ -1,0 +1,23 @@
+Api Routes and expected returns
+
+USERS
+/users: return all users
+/user-{id}: return id specific user
+
+
+INVENTORY
+/inventory: return all users
+/inventroy-{type}: return inventory specific inventroy type
+/inventory-{type}-{id}: return inventory specific id from type
+
+
+ORGANIZATIONS
+/organization: return all organizations
+/organization-{id}: return organization by id
+/organization-inventory: return organizations inventroy
+/organization-users: return organizations users
+/organizations-flights: return all of an organizaitons flights
+
+FLIGHTS
+/flights: return all flights
+
